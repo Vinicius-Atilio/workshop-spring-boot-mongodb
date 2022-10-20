@@ -1,6 +1,7 @@
 package com.vinicius.workshopmongo.resources;
 
 import com.vinicius.workshopmongo.DTO.UserDTO;
+import com.vinicius.workshopmongo.domain.Post;
 import com.vinicius.workshopmongo.domain.User;
 import com.vinicius.workshopmongo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +29,23 @@ public class UserResource {
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable String id){
         User obj = service.findById(id);
-        return ResponseEntity.ok().body(new UserDTO(obj));
+        return ResponseEntity
+                .ok()
+                .body(new UserDTO(obj));
     }
 
     @PostMapping()
     public ResponseEntity<Void> insert(@RequestBody UserDTO objDTO){
         User obj = service.fromDTO(objDTO);
         obj = service.insert(obj);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).build();
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(obj.getId())
+                .toUri();
+        return ResponseEntity
+                .created(uri)
+                .build();
     }
 
     @DeleteMapping(value = "{id}")
@@ -55,4 +64,13 @@ public class UserResource {
         service.update(obj);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping(value = "/{id}/posts")
+    public ResponseEntity<List<Post>> findPosts(@PathVariable String id){
+        User obj = service.findById(id);
+        return ResponseEntity
+                .ok()
+                .body(obj.getPosts());
+    }
+
 }
