@@ -32,7 +32,6 @@ public class Post implements Serializable {
         this.author = author;
     }
 
-
     public String getId() {
         return id;
     }
